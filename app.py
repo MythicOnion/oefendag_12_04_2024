@@ -85,9 +85,6 @@ if api_data and sst["API_data_received"] == False:
     except:
         st.error("🔥Ongeldige API")
     if sst["API_data_received"] == True and sst["data_uploaded"] == False:
-        # df = pd.DataFrame(data.json())
-        # df = df.transpose()
-    
         ## Silly stuff  - remove later and replace with more generic script
         gdf = gpd.GeoDataFrame(data.json()["locaties"])
         gdf = gdf.transpose()
@@ -106,22 +103,9 @@ if api_data and sst["API_data_received"] == False:
         gdf = gpd.GeoDataFrame(gdf, geometry=geometry)
         sst["gdf"] = gdf   
         sst["data_uploaded"] = True
-#     selected_epsg = st.sidebar.selectbox("Welke EPSG gebruik je voor je data?", [4326, 3857, "Anders..."])
-#     if selected_epsg == "Anders...":
-#         selected_epsg =  st.sidebar.number_input("Type hier je EPSG in.", value=4326)
-
-#     data_uploaded = st.sidebar.button(label="Visualiseer mijn data!", type="primary")   
-#     if data_uploaded == True:
-#         sst["data_uploaded"] = True
-#         geometry = gpd.points_from_xy(data[lon], data[lat], crs=int(selected_epsg))
-#         gdf = gpd.GeoDataFrame(data, geometry=geometry)
-#         if selected_epsg != 4326:
-#             gdf = gdf.to_crs(4326)
-#         sst["gdf"] = gdf    
         
 with MapTab:
     ### Setting parameters for the height and width of the maps to be displayed
-    # if not sst["map"]:
     if not sst["data_uploaded"]:
         sst["map"] = render_map(location=[52.155499, 5.387740], zoom_start=7, map_width=map_width, map_height=map_height)        
         map_folium = st_folium.st_folium(sst["map"], width = map_width, height = map_height)
